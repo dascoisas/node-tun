@@ -1,0 +1,19 @@
+{
+  "name": "node-tun",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ffi-napi": "^3.0.1",
+    "ioctl": "^2.0.2",
+    "ref-array-napi": "^1.2.1",
+    "ref-napi": "^3.0.1",
+    "ref-struct-napi": "^1.1.1",
+    "ref-union-napi": "^1.0.2"
+  }
+}
