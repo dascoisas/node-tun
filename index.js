@@ -2,17 +2,15 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const ioctl = require('ioctl');
 const ffi = require('ffi-napi');
-const child_process = require('child_process');
 
-const ref = require('ref-napi');
 const array = require('ref-array-napi');
 const struct = require('ref-struct-napi');
 const union = require('ref-union-napi');
 
 const Types = require('./types');
-const { builtinModules } = require('module');
-const { runInThisContext } = require('vm');
 const types = new Types;
+
+const TUN_PATH = "/dev/net/tun"
 
 class Tun extends EventEmitter {
     constructor(ifname, ifaddr, prefixlen) {
@@ -25,7 +23,7 @@ class Tun extends EventEmitter {
     };
 
     open() {
-        var fd = fs.openSync('/dev/net/tun', 'r+');
+        var fd = fs.openSync(TUN_PATH, 'r+');
     
         var ifr = new types.ifreq();
         ifr.ref().fill(0);
