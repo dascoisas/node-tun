@@ -3,10 +3,6 @@ const fs = require('fs');
 const ioctl = require('ioctl');
 const ffi = require('ffi-napi');
 
-const array = require('ref-array-napi');
-const struct = require('ref-struct-napi');
-const union = require('ref-union-napi');
-
 const Types = require('./types');
 const types = new Types;
 
