@@ -37,26 +37,18 @@ class Tun extends EventEmitter {
         
         // use this socket for controlling linux by ioctl
         var sock_fd = current.socket(types.AF_INET6, types.SOCK_DGRAM, 0);
-        
+        this.sock_fd = sock_fd
         // get interface index
         ifr.ref().fill(0);
         ifr.ifrn_name.buffer.write(this.ifname);
         ioctl(sock_fd, types.SIOCGIFINDEX, ifr.ref());
         
         var if_index = ifr.ifr_ifru.ifru_ivalue;
-        console.log(" int id=", if_index);
+        this.if_index = if_index
+        //console.log(" int id=", if_index);
         
-        // set address
-        // TODO: pass parameters
-        var ifr6 = new types.ifreq6();
-        ifr6.ref().fill(0);
-        ifr6.ifindex = if_index;
-        ifr6.prefixlen = 64;
-        ifr6.address[0] = 0xcc;
-        ifr6.address[1] = 0xcc;
-        ifr6.address[15] = 0x01;
-        ioctl(sock_fd, types.SIOCSIFADDR, ifr6.ref());
-        
+        this.setAddress(this.ifaddr, this.prefixlen)
+
         // up
         // get flags
         ifr.ref().fill(0);
@@ -79,6 +71,19 @@ class Tun extends EventEmitter {
     send(buf) {
         this.writeStream.write(Buffer.from(buf))
     };
+
+    setAddress(ifaddr, prefixlen){
+        // set address
+        // TODO: pass parameters
+        var ifr6 = new types.ifreq6();
+        ifr6.ref().fill(0);
+        ifr6.ifindex = this.if_index;
+        ifr6.prefixlen = prefixlen;
+        for (let i = 0; i < 16; i++) {
+            ifr6.address[i] = ifaddr[i]
+        }
+        ioctl(this.sock_fd, types.SIOCSIFADDR, ifr6.ref());
+    }
 
 }
 
